@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* LUMIÈRE INTERIORS — dark cinematic editorial design system */
+
+@layer base {
+  :root {
+    /* Core dark palette */
+    --background: 0 0% 4%;
+    --foreground: 36 20% 92%;
+
+    --card: 0 0% 6%;
+    --card-foreground: 36 20% 92%;
+
+    --popover: 0 0% 6%;
+    --popover-foreground: 36 20% 92%;
+
+    --primary: 36 20% 92%;
+    --primary-foreground: 0 0% 4%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 36 20% 92%;
+
+    --muted: 0 0% 10%;
+    --muted-foreground: 36 8% 60%;
+
+    --accent: 38 55% 58%;
+    --accent-foreground: 0 0% 4%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 36 20% 92%;
+
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 38 55% 58%;
+
+    --radius: 0;
+
+    /* Brand tokens */
+    --gold: 38 55% 58%;
+    --gold-soft: 38 40% 70%;
+    --ink: 0 0% 4%;
+    --ink-soft: 0 0% 8%;
+    --bone: 36 25% 94%;
+
+    --gradient-fade: linear-gradient(180deg, transparent 0%, hsl(var(--ink)) 100%);
+    --gradient-radial: radial-gradient(ellipse at center, hsl(var(--ink-soft)) 0%, hsl(var(--ink)) 70%);
+    --shadow-editorial: 0 40px 80px -20px hsl(0 0% 0% / 0.6);
+
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 36 20% 92%;
+    --sidebar-primary: 38 55% 58%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 36 20% 92%;
+    --sidebar-border: 0 0% 14%;
+    --sidebar-ring: 38 55% 58%;
+  }
+
+  .dark { color-scheme: dark; }
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { background: hsl(var(--background)); }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, h5, h6, .font-serif { font-family: 'Playfair Display', serif; }
+
+  ::selection { background: hsl(var(--gold) / 0.4); color: hsl(var(--bone)); }
+
+  @media (hover: hover) and (pointer: fine) {
+    body, a, button, [role="button"], img { cursor: none !important; }
+  }
+}
+
+@layer utilities {
+  .container-editorial { @apply max-w-[1600px] mx-auto px-6 md:px-12; }
+  .text-balance { text-wrap: balance; }
+
+  .story-link {
+    @apply relative inline-block;
+  }
+  .story-link::after {
+    content: '';
+    position: absolute; left: 0; bottom: -2px; height: 1px; width: 100%;
+    background: hsl(var(--bone));
+    transform: scaleX(0); transform-origin: right;
+    transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .story-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  .grain::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .marquee-track { animation: marquee 40s linear infinite; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .draw-line {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+}
