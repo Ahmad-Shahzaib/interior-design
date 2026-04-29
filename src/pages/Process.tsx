@@ -7,12 +7,10 @@ import { SectionLabel } from "@/components/SectionLabel";
 gsap.registerPlugin(ScrollTrigger);
 
 const STEPS = [
-  { n: "01", title: "Discover", text: "Site visits, conversations, and the slow building of brief." },
-  { n: "02", title: "Concept", text: "Mood, plan, and material direction in one editorial deck." },
-  { n: "03", title: "Develop", text: "Detailed drawings, lighting plan, and FF&E specification." },
-  { n: "04", title: "Source", text: "We commission, procure, and quality-check every piece." },
-  { n: "05", title: "Build", text: "On-site coordination with trades and craftspeople." },
-  { n: "06", title: "Reveal", text: "Styling, photography, and the handover of a living space." },
+  { n: "01", title: "Discovery Call", text: "We listen to your needs, answer questions, and explain what to expect." },
+  { n: "02", title: "Design Concept", text: "We translate the brief into a visual concept, material palette, and plan." },
+  { n: "03", title: "Execution", text: "We manage procurement, trades, and installation with thoughtful oversight." },
+  { n: "04", title: "Handover", text: "We reveal the finished room, refine details, and hand over a calm living space." },
 ];
 
 export default function Process() {
@@ -49,6 +47,9 @@ export default function Process() {
       <section className="pt-32 pb-12 container-editorial">
         <SectionLabel>METHOD</SectionLabel>
         <h1 className="font-serif text-bone text-5xl md:text-8xl mt-4">Our process.</h1>
+        <p className="max-w-3xl text-bone/70 mt-8 text-lg leading-relaxed">
+          Clients are often nervous about hiring a designer — they don't know what to expect. A simple 3–4 step process removes that fear and shows exactly how we move from introduction to handover.
+        </p>
       </section>
 
       <div ref={wrap} className="relative h-screen overflow-hidden">

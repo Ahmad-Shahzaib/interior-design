@@ -1,15 +1,30 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { PageTransition } from "@/components/PageTransition";
 import { NoiseMesh } from "@/components/three/NoiseMesh";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Counter } from "@/components/Counter";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { IMG, PROJECTS, UNSPLASH } from "@/lib/data";
 import { ArrowRight } from "lucide-react";
 
 const HEADING = ["WE DESIGN", "LIVING POETRY"];
 const MARQUEE = [UNSPLASH.i1, UNSPLASH.i2, UNSPLASH.i3, UNSPLASH.i4, UNSPLASH.i5, UNSPLASH.i6, UNSPLASH.i7, UNSPLASH.i8];
+const PORTFOLIO_FEED = [IMG.p1, IMG.p2, IMG.p3, UNSPLASH.i10, UNSPLASH.i11, UNSPLASH.i12];
+const SPECIALISATIONS = ["Residential", "Hospitality", "Commercial", "Home Office"];
+
+const TESTIMONIALS = [
+  { quote: "Working with Lumière felt effortless. The design delivered exactly the calm luxury we wanted.", name: "Camille Bourdon", role: "Creative Director, Maison Verre", img: UNSPLASH.team3 },
+  { quote: "They translated our brief into a home that feels both warm and impeccably composed.", name: "James Hartley", role: "Founder, Atelier Laurent", img: UNSPLASH.team1 },
+  { quote: "Every detail was considered. The finished space feels personal and timeless.", name: "Mira Okafor", role: "Private Client", img: UNSPLASH.team4 },
+];
+
+const FAQ = [
+  { question: "How much does it cost?", answer: "Each project is unique, but we begin with a tailored scope based on your brief and budget. A discovery call helps us align on cost before design begins." },
+  { question: "Do you work remotely?", answer: "Yes. We can work remotely for concept and procurement, while maintaining local site oversight through trusted partners and regular updates." },
+  { question: "How long does a project take?", answer: "Typical residential and office projects take 12–18 weeks from concept to handover, depending on scale and procurement lead times." },
+];
 
 const Word = ({ children, delay }: { children: string; delay: number }) => (
   <span className="inline-block overflow-hidden align-bottom">
@@ -37,6 +52,30 @@ const RevealLine = ({ text }: { text: string }) => {
       {words.map((w, i) => (
         <RevealWord key={i} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>{w}</RevealWord>
       ))}
+    </div>
+  );
+};
+
+const BeforeAfter = () => {
+  const [pos, setPos] = useState(50);
+
+  return (
+    <div className="relative w-full aspect-[16/9] overflow-hidden select-none rounded-3xl border border-border bg-ink">
+      <img src={UNSPLASH.i9} alt="Before" className="absolute inset-0 w-full h-full object-cover grayscale" />
+      <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
+        <img src={IMG.p1} alt="After" className="absolute inset-0 w-full h-full object-cover" style={{ width: `${100 / (pos / 100)}%` }} />
+      </div>
+      <div className="absolute inset-y-0 w-px bg-bone/80" style={{ left: `${pos}%` }}>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bone text-ink flex items-center justify-center text-xs">↔</div>
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        value={pos}
+        onChange={(e) => setPos(+e.target.value)}
+        className="absolute inset-0 w-full opacity-0 cursor-ew-resize"
+      />
     </div>
   );
 };
@@ -118,6 +157,126 @@ export default function Home() {
               </span>
             </motion.div>
           ))}
+        </div>
+      </section>
+
+      {/* SPECIALISATIONS */}
+      <section className="container-editorial py-24">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-12">
+          <div>
+            <SectionLabel>SPECIALISATIONS</SectionLabel>
+            <h2 className="font-serif text-bone text-3xl md:text-5xl mt-4">We design rooms for the life you live.</h2>
+          </div>
+          <p className="max-w-xl text-bone/70 text-sm md:text-base">
+            We design Residential, Hospitality, Commercial and Home Office spaces with the same attentiveness to atmosphere, materials and function.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {SPECIALISATIONS.map((type) => (
+            <div key={type} className="rounded-[2rem] border border-border bg-ink/80 p-8 text-center">
+              <p className="font-serif text-bone text-2xl md:text-3xl">{type}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* BEFORE/AFTER */}
+      <section className="container-editorial py-24">
+        <div className="flex flex-col gap-6 md:gap-0 md:flex-row md:items-end md:justify-between mb-12">
+          <div>
+            <SectionLabel>PROOF OF VALUE</SectionLabel>
+            <h2 className="font-serif text-bone text-3xl md:text-5xl mt-4">Before & After Slider</h2>
+          </div>
+          <p className="max-w-xl text-bone/70 text-sm md:text-base">
+            Interior designers' biggest proof of value. A before/after of a real room transformation is more convincing than any text. Clients love it.
+          </p>
+        </div>
+        <BeforeAfter />
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="container-editorial py-24">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-12">
+          <div>
+            <SectionLabel>REVIEWS</SectionLabel>
+            <h2 className="font-serif text-bone text-3xl md:text-5xl mt-4">Trusted by clients who value calm, considered interiors.</h2>
+          </div>
+          <p className="max-w-xl text-bone/70 text-sm md:text-base">
+            Social proof matters in a trust-based service like interior design. These brief quotes help clients feel confident before they reach out.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {TESTIMONIALS.map((testimonial, idx) => (
+            <div key={idx} className="rounded-[2rem] border border-border bg-ink/80 p-8 flex flex-col gap-6">
+              <p className="font-serif italic text-bone text-xl leading-relaxed">“{testimonial.quote}”</p>
+              <div className="flex items-center gap-4">
+                <img src={testimonial.img} alt={testimonial.name} className="h-16 w-16 rounded-full object-cover" />
+                <div>
+                  <p className="font-serif text-bone text-base">{testimonial.name}</p>
+                  <p className="text-xs uppercase tracking-[0.25em] text-gold">{testimonial.role}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="container-editorial py-24">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-12">
+          <div>
+            <SectionLabel>FAQ</SectionLabel>
+            <h2 className="font-serif text-bone text-3xl md:text-5xl mt-4">Answers to the questions that stop people from enquiring.</h2>
+          </div>
+          <p className="max-w-xl text-bone/70 text-sm md:text-base">
+            We address cost, process and remote work upfront so the path to enquiry feels clear and confident.
+          </p>
+        </div>
+        <Accordion type="single" collapsible className="space-y-4 rounded-[2rem] border border-border bg-ink/80 p-6">
+          {FAQ.map((item, idx) => (
+            <AccordionItem key={idx} value={`item-${idx}`} className="rounded-3xl bg-ink/70">
+              <AccordionTrigger className="px-6">
+                <span className="text-base md:text-lg text-bone">{item.question}</span>
+              </AccordionTrigger>
+              <AccordionContent className="px-6">
+                <p className="text-sm leading-relaxed text-bone/70">{item.answer}</p>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </section>
+
+      {/* PORTFOLIO FEED */}
+      <section className="container-editorial py-24">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-12">
+          <div>
+            <SectionLabel>PORTFOLIO</SectionLabel>
+            <h2 className="font-serif text-bone text-3xl md:text-5xl mt-4">Visual work that shows what we do.</h2>
+          </div>
+          <p className="max-w-xl text-bone/70 text-sm md:text-base">
+            Interior design is highly visual. This curated grid of recent rooms builds credibility and keeps people on the page longer.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+          {PORTFOLIO_FEED.map((src, idx) => (
+            <div key={idx} className="overflow-hidden rounded-3xl bg-ink h-44 md:h-52">
+              <img src={src} alt={`Portfolio ${idx + 1}`} className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 bg-bone">
+        <div className="container-editorial flex flex-col items-center justify-center text-center gap-6">
+          <p className="text-sm uppercase tracking-[0.35em] text-ink/60">Ready to begin?</p>
+          <h2 className="font-serif text-4xl md:text-6xl text-ink max-w-3xl">Book a free consultation and see how we can transform your space.</h2>
+          <Link
+            to="/contact"
+            className="inline-flex items-center justify-center rounded-full bg-ink px-10 py-5 text-sm uppercase tracking-[0.3em] text-bone transition hover:bg-ink/90"
+          >
+            Book a Free Consultation
+          </Link>
         </div>
       </section>
 
