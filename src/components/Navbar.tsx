@@ -23,6 +23,28 @@ export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const loc = useLocation();
 
+  const customName = new URLSearchParams(loc.search).get("name")?.trim();
+  const pathname = loc.pathname.replace(/^\/|\/$/g, "");
+  const isCustomPathName =
+    pathname &&
+    !pathname.includes("/") &&
+    !NAV_LINKS.some((link) => link.to.toLowerCase() === `/${pathname.toLowerCase()}`) &&
+    pathname.toLowerCase() !== "contact";
+
+  const [storedName, setStoredName] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return window.localStorage.getItem("lumiere-brand-name");
+  });
+
+  useEffect(() => {
+    const nextName = customName || (isCustomPathName ? pathname : null);
+    if (!nextName) return;
+    window.localStorage.setItem("lumiere-brand-name", nextName);
+    setStoredName(nextName);
+  }, [customName, isCustomPathName, pathname]);
+
+  const brandName = customName || (isCustomPathName ? pathname : storedName) || "LUMIÈRE";
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
@@ -44,7 +66,7 @@ export const Navbar = () => {
       >
         <nav className="container-editorial flex items-center justify-between h-20">
           <Link to="/" className="font-serif text-lg md:text-xl tracking-[0.18em] text-bone">
-            LUMIÈRE
+            {brandName}
           </Link>
 
           <ul className="hidden lg:flex items-center gap-8">
@@ -90,7 +112,7 @@ export const Navbar = () => {
             className="fixed inset-0 z-[200] bg-ink"
           >
             <div className="container-editorial flex justify-between items-center h-20">
-              <span className="font-serif text-lg tracking-[0.18em] text-bone">LUMIÈRE</span>
+              <span className="font-serif text-lg tracking-[0.18em] text-bone">{brandName}</span>
               <button onClick={() => setOpen(false)} className="text-bone" aria-label="Close menu">
                 <X size={24} />
               </button>

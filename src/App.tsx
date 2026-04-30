@@ -51,6 +51,7 @@ const AnimatedRoutes = () => {
         <Route path="/sustainability" element={<Sustainability />} />
         <Route path="/careers" element={<Careers />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/:name" element={<Home />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

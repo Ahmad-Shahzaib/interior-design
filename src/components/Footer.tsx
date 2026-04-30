@@ -36,7 +36,7 @@ export const Footer = () => (
             12 Rue de Sèvres<br />75007 Paris, France
           </div>
           <div>
-            hello@lumiere.studio<br />+33 1 42 22 88 88
+            hello@studio<br />+00 0 00 000 0000
           </div>
         </address>
       </div>

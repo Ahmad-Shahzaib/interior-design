@@ -1,6 +1,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PageTransition } from "@/components/PageTransition";
 import { NoiseMesh } from "@/components/three/NoiseMesh";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -80,7 +82,37 @@ const BeforeAfter = () => {
   );
 };
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Home() {
+  const marqueeWrap = useRef<HTMLDivElement>(null);
+  const marqueeTrack = useRef<HTMLDivElement>(null);
+  const marqueeBar = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!marqueeWrap.current || !marqueeTrack.current) return;
+    const ctx = gsap.context(() => {
+      const distance = () => marqueeTrack.current!.scrollWidth - window.innerWidth;
+      const tween = gsap.to(marqueeTrack.current, {
+        x: () => -distance(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: marqueeWrap.current,
+          start: "top top",
+          end: () => `+=${distance()}`,
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            if (marqueeBar.current) marqueeBar.current.style.transform = `scaleX(${self.progress})`;
+          },
+        },
+      });
+      return () => tween.kill();
+    }, marqueeWrap);
+    return () => ctx.revert();
+  }, []);
+
   return (
     <PageTransition>
       {/* HERO */}
@@ -141,22 +173,27 @@ export default function Home() {
           <SectionLabel>SELECTED FRAMES</SectionLabel>
           <Link to="/projects" className="story-link text-bone text-xs uppercase tracking-[0.2em]">All projects →</Link>
         </div>
-        <div className="flex gap-6 overflow-x-auto px-6 md:px-12 pb-6 snap-x">
-          {MARQUEE.map((src, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ rotate: -2, y: -8 }}
-              transition={{ duration: 0.4 }}
-              className="relative shrink-0 w-[80vw] md:w-[28vw] aspect-[3/4] snap-center group overflow-hidden"
-              data-cursor="view"
-            >
-              <img src={src} alt={`Frame ${i + 1}`} loading="lazy" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
-              <span className="absolute top-4 left-4 font-serif text-bone/70 text-sm">{String(i + 1).padStart(2, "0")}</span>
-              <span className="absolute inset-0 flex items-center justify-center font-serif text-bone text-[14rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                {i + 1}
-              </span>
-            </motion.div>
-          ))}
+        <div ref={marqueeWrap} className="relative h-screen overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-px bg-border z-10">
+            <div ref={marqueeBar} className="h-full bg-gold origin-left scale-x-0" />
+          </div>
+          <div ref={marqueeTrack} className="flex h-full items-center" style={{ width: "max-content" }}>
+            {MARQUEE.map((src, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ rotate: -2, y: -8 }}
+                transition={{ duration: 0.4 }}
+                className="relative shrink-0 w-[80vw] md:w-[28vw] aspect-[3/4] snap-center group overflow-hidden mx-6"
+                data-cursor="view"
+              >
+                <img src={src} alt={`Frame ${i + 1}`} loading="lazy" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                <span className="absolute top-4 left-4 font-serif text-bone/70 text-sm">{String(i + 1).padStart(2, "0")}</span>
+                <span className="absolute inset-0 flex items-center justify-center font-serif text-bone text-[14rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  {i + 1}
+                </span>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -27,8 +27,8 @@ export default function Contact() {
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.25em] text-gold">Contact</p>
-                <p className="mt-1">hello@lumiere.studio</p>
-                <p>+33 1 42 22 88 88</p>
+                <p className="mt-1">hello@studio</p>
+                <p>+00 0 00 000 0000</p>
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.25em] text-gold">Hours</p>
