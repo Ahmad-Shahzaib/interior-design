@@ -63,9 +63,9 @@ const BeforeAfter = () => {
 
   return (
     <div className="relative w-full aspect-[16/9] overflow-hidden select-none rounded-3xl border border-border bg-ink">
-      <img src={UNSPLASH.i9} alt="Before" className="absolute inset-0 w-full h-full object-cover grayscale" />
+      <img src={UNSPLASH.i9} alt="Before" className="absolute inset-0 w-full h-full object-cover " />
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
-        <img src={IMG.p1} alt="After" className="absolute inset-0 w-full h-full object-cover" style={{ width: `${100 / (pos / 100)}%` }} />
+        <img src={IMG.p1} alt="After" className="absolute  w-full h-full object-cover grayscale" style={{ width: `${100 / (pos / 100)}%` }} />
       </div>
       <div className="absolute inset-y-0 w-px bg-bone/80" style={{ left: `${pos}%` }}>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bone text-ink flex items-center justify-center text-xs">↔</div>

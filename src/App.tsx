@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,7 +10,7 @@ import { Cursor } from "./components/Cursor";
 import { Loader } from "./components/Loader";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
-import { useLenis } from "./hooks/useLenis";
+import { getLenis, useLenis } from "./hooks/useLenis";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -58,6 +58,21 @@ const AnimatedRoutes = () => {
   );
 };
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const lenis = getLenis();
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname]);
+
+  return null;
+};
+
 const Shell = () => {
   const [ready, setReady] = useState(false);
   useLenis();
@@ -66,6 +81,7 @@ const Shell = () => {
       <Loader onComplete={() => setReady(true)} />
       <Cursor />
       <Navbar />
+      <ScrollToTop />
       <AnimatedRoutes />
       <Footer />
       {/* ready is used by lenis to ensure layout */}

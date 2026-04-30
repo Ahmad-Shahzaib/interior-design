@@ -27,7 +27,7 @@ export default function Contact() {
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.25em] text-gold">Contact</p>
-                <p className="mt-1">hello@studio</p>
+                <p className="mt-1">hello@domain.com</p>
                 <p>+00 0 00 000 0000</p>
               </div>
               <div>
