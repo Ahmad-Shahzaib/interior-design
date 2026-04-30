@@ -1,10 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useBrandName } from "@/hooks/useBrandName";
 import { NAV_LINKS } from "./Navbar";
 
 export const Footer = () => {
   const loc = useLocation();
-  const customName = new URLSearchParams(loc.search).get("name")?.trim();
   const pathname = loc.pathname.replace(/^\/|\/$/g, "");
   const isCustomPathName =
     pathname &&
@@ -12,19 +11,7 @@ export const Footer = () => {
     !NAV_LINKS.some((link) => link.to.toLowerCase() === `/${pathname.toLowerCase()}`) &&
     pathname.toLowerCase() !== "contact";
 
-  const [storedName, setStoredName] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    return window.localStorage.getItem("lumiere-brand-name");
-  });
-
-  useEffect(() => {
-    const nextName = customName || (isCustomPathName ? pathname : null);
-    if (!nextName) return;
-    window.localStorage.setItem("lumiere-brand-name", nextName);
-    setStoredName(nextName);
-  }, [customName, isCustomPathName, pathname]);
-
-  const brandName = customName || (isCustomPathName ? pathname : storedName) || "LUMIÈRE";
+  const brandName = useBrandName(pathname, loc.search, isCustomPathName);
 
   return (
     <footer className="bg-ink-soft border-t border-border mt-32">
