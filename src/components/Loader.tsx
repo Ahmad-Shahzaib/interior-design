@@ -1,10 +1,20 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-
-const LETTERS = "LUMIÈRE".split("");
+import { useLocation } from "react-router-dom";
+import { useBrandName } from "@/hooks/useBrandName";
+import { NAV_LINKS } from "./Navbar";
 
 export const Loader = ({ onComplete }: { onComplete: () => void }) => {
   const [show, setShow] = useState(true);
+  const loc = useLocation();
+  const pathname = loc.pathname.replace(/^\/|\/$/g, "");
+  const isCustomPathName =
+    pathname &&
+    !pathname.includes("/") &&
+    !NAV_LINKS.some((link) => link.to.toLowerCase() === `/${pathname.toLowerCase()}`) &&
+    pathname.toLowerCase() !== "contact";
+  const brandName = useBrandName(pathname, loc.search, isCustomPathName);
+  const LETTERS = brandName.toUpperCase().split("");
 
   useEffect(() => {
     if (sessionStorage.getItem("lumiere-loaded")) {

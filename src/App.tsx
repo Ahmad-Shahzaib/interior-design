@@ -8,9 +8,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { Cursor } from "./components/Cursor";
 import { Loader } from "./components/Loader";
-import { Navbar } from "./components/Navbar";
+import { Navbar, NAV_LINKS } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { getLenis, useLenis } from "./hooks/useLenis";
+import { useBrandName } from "@/hooks/useBrandName";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -73,6 +74,28 @@ const ScrollToTop = () => {
   return null;
 };
 
+const TitleManager = () => {
+  const loc = useLocation();
+  const pathname = loc.pathname.replace(/^\/|\/$/g, "");
+  const isCustomPathName =
+    pathname &&
+    !pathname.includes("/") &&
+    !NAV_LINKS.some((link) => link.to.toLowerCase() === `/${pathname.toLowerCase()}`) &&
+    pathname.toLowerCase() !== "contact";
+  const brandName = useBrandName(pathname, loc.search, isCustomPathName);
+  const title = `${brandName.toUpperCase()} INTERIORS`;
+
+  useEffect(() => {
+    document.title = title;
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", title);
+    const titleMeta = document.querySelector('meta[name="title"]');
+    if (titleMeta) titleMeta.setAttribute("content", title);
+  }, [title]);
+
+  return null;
+};
+
 const Shell = () => {
   const [ready, setReady] = useState(false);
   useLenis();
@@ -81,6 +104,7 @@ const Shell = () => {
       <Loader onComplete={() => setReady(true)} />
       <Cursor />
       <Navbar />
+      <TitleManager />
       <ScrollToTop />
       <AnimatedRoutes />
       <Footer />
