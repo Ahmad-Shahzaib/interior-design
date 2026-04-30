@@ -9,7 +9,7 @@ export const useBrandName = (
 ) => {
   const queryName = (() => {
     const params = new URLSearchParams(search);
-    const nameParam = params.get("name")?.trim() || params.get("n")?.trim();
+    const nameParam = params.get("name")?.trim();
     if (nameParam) return nameParam;
 
     const raw = search.startsWith("?") ? search.slice(1) : search;
